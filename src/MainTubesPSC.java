@@ -6,7 +6,7 @@
 
 /**
  *
- * @author alvin
+ * @author Alvin
  */
 
 import java.util.Random;
