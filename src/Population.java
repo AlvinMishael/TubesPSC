@@ -12,14 +12,16 @@ import java.util.Random;
 //Population class
 class Population {
 
-    int popSize = 10;
-    Individual[] individuals = new Individual[10];
+    int popSize;
+    Individual[] individuals;
     int fittest = 0;
 
     //Initialize population
-    public void initializePopulation(int size) {
+    public void initializePopulation(int size, int geneLength) {
+        this.popSize = size;
+        this.individuals = new Individual[this.popSize];
         for (int i = 0; i < individuals.length; i++) {
-            individuals[i] = new Individual();
+            individuals[i] = new Individual(geneLength);
         }
     }
 

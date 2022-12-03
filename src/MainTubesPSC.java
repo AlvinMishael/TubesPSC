@@ -10,16 +10,22 @@
  */
 
 import java.util.Random;
+import java.util.Scanner;
 public class MainTubesPSC {
     Population population = new Population();
     Individual fittest;
     Individual secondFittest;
     int generationCount = 0;
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         Random rn = new Random();
         MainTubesPSC demo = new MainTubesPSC();
+        System.out.print("Ukuran Populasi Awal: ");
+        int popSize = sc.nextInt();
+        System.out.print("Ukuran tabel: ");
+        int panjangTabel = sc.nextInt();
         //Initialize population
-        demo.population.initializePopulation(10);
+        demo.population.initializePopulation(popSize, panjangTabel*panjangTabel);
         //Calculate fitness of each individual
         demo.population.calculateFitness();
         System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.population.fittest);

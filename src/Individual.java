@@ -12,14 +12,15 @@ import java.util.Random;
 //Individual class
 class Individual {
 
-    int fitness = 0;
+    int fitness;
     int geneLength;
-    int[] genes = new int[geneLength];
+    int[] genes;
     
 
     public Individual(int geneLength) {
         Random rn = new Random();
-            this.geneLength = geneLength;
+        this.geneLength = geneLength;
+        this.genes = new int[geneLength];
         //Set genes randomly for each individual
         for (int i = 0; i < genes.length; i++) {
             genes[i] = Math.abs(rn.nextInt() % 2);
