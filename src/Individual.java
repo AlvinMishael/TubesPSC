@@ -13,12 +13,13 @@ import java.util.Random;
 class Individual {
 
     int fitness = 0;
-    int[] genes = new int[25];
-    int geneLength = 25;
+    int geneLength;
+    int[] genes = new int[geneLength];
+    
 
-    public Individual() {
+    public Individual(int geneLength) {
         Random rn = new Random();
-
+            this.geneLength = geneLength;
         //Set genes randomly for each individual
         for (int i = 0; i < genes.length; i++) {
             genes[i] = Math.abs(rn.nextInt() % 2);
@@ -29,7 +30,7 @@ class Individual {
     //Calculate fitness
     public void calcFitness() {
         fitness = 100;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 25; i++) {
            
         }
     }
