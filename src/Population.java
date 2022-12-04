@@ -15,13 +15,22 @@ class Population {
     int popSize;
     Individual[] individuals;
     int fittest = 0;
+    int[] table; 
+    //Inisialisasi populasi dari array of Individual
+    public void initializeNewPopulation(Individual[] individuals, int[] table ){
+        this.table = table;
+        this.popSize = individuals.length;
+        this.individuals = new Individual[individuals.length];
+        System.arraycopy(individuals, 0, this.individuals, 0, individuals.length);
+    }
 
-    //Initialize population
-    public void initializePopulation(int size, int geneLength) {
+    //Inisialisasi Populasi
+    public void initializePopulation(int size, int geneLength, int[] tabel) {
+        this.table = tabel;
         this.popSize = size;
         this.individuals = new Individual[this.popSize];
         for (int i = 0; i < individuals.length; i++) {
-            individuals[i] = new Individual(geneLength);
+            individuals[i] = new Individual(geneLength, tabel);
         }
     }
 
@@ -38,42 +47,37 @@ class Population {
         fittest = individuals[maxFitIndex].fitness;
         return individuals[maxFitIndex];
     }
-
-    //Get the second most fittest individual
-    public Individual getSecondFittest() {
-        int maxFit1 = 0;
-        int maxFit2 = 0;
-        for (int i = 0; i < individuals.length; i++) {
-            if (individuals[i].fitness > individuals[maxFit1].fitness) {
-                maxFit2 = maxFit1;
-                maxFit1 = i;
-            } else if (individuals[i].fitness > individuals[maxFit2].fitness) {
-                maxFit2 = i;
-            }
+    
+    public Individual[] getParentsPopulation(){
+        Individual[] parents = new Individual[this.popSize];
+        for(int i =0; i < this.popSize; i++){
+            parents[i] = new Individual(this.rouletteWheelSelecetion());
         }
-        return individuals[maxFit2];
+        return parents;
     }
-
-    //Get index of least fittest individual
-    public int getLeastFittestIndex() {
-        int minFitVal = Integer.MAX_VALUE;
-        int minFitIndex = 0;
-        for (int i = 0; i < individuals.length; i++) {
-            if (minFitVal >= individuals[i].fitness) {
-                minFitVal = individuals[i].fitness;
-                minFitIndex = i;
+    
+    public Individual rouletteWheelSelecetion(){
+        int totalSum = 0;
+        for(int i =0; i < this.popSize; i++){
+            totalSum += this.individuals[i].fitness;
+        }
+        Random rd = new Random();
+        int rand = rd.nextInt(totalSum);
+        int sum = 0;
+        for(int i =0; i < this.popSize; i++){
+            sum += this.individuals[i].fitness;
+            if(sum >= rand){
+                return this.individuals[i];
             }
         }
-        return minFitIndex;
+        return null;
     }
 
     //Calculate fitness of each individual
     public void calculateFitness() {
-
-        for (int i = 0; i < individuals.length; i++) {
-            individuals[i].calcFitness();
+        for (Individual individual : individuals) {
+            individual.calcFitness();
         }
         getFittest();
     }
-
 }

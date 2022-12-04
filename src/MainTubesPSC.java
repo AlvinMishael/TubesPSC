@@ -13,8 +13,8 @@ import java.util.Random;
 import java.util.Scanner;
 public class MainTubesPSC {
     Population population = new Population();
-    Individual fittest;
-    Individual secondFittest;
+    Population fittest;
+    int popsize;
     int generationCount = 0;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -24,92 +24,88 @@ public class MainTubesPSC {
         int popSize = sc.nextInt();
         System.out.print("Ukuran tabel: ");
         int panjangTabel = sc.nextInt();
+        int[] tabel = new int[panjangTabel*panjangTabel];
+        System.out.println("Masukan tabel:");
+        for(int i =0; i < panjangTabel*panjangTabel; i++){
+            tabel[i] = sc.nextInt();
+        }
         //Initialize population
-        demo.population.initializePopulation(popSize, panjangTabel*panjangTabel);
+        demo.population.initializePopulation(popSize, panjangTabel*panjangTabel, tabel);
         //Calculate fitness of each individual
         demo.population.calculateFitness();
         System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.population.fittest);
         //While population gets an individual with maximum fitness
-        while (demo.population.fittest < 5) {
+        while (demo.population.fittest < 100) {
             ++demo.generationCount;
             //Do selection
             demo.selection();
             //Do crossover
             demo.crossover();
             //Do mutation under a random probability
-            if (rn.nextInt()%7 < 5) {
-                demo.mutation();
+            for(int i = 0; i < popSize; i++){
+                if (rn.nextInt()%10000 < 1) {
+                    demo.mutation(i);
+                }
             }
             //Add fittest offspring to population
-            demo.addFittestOffspring();
+            demo.newPopulation();
             //Calculate new fitness value
             demo.population.calculateFitness();
 
             System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.population.fittest);
         }
-
         System.out.println("\nSolution found in generation " + demo.generationCount);
         System.out.println("Fitness: "+demo.population.getFittest().fitness);
-        System.out.print("Genes: ");
-        for (int i = 0; i < 5; i++) {
-            System.out.print(demo.population.getFittest().genes[i]);
+        System.out.println("Genes: ");
+        for (int i = 0; i < panjangTabel; i++) {
+            for(int j =0; j < panjangTabel; j++){
+                System.out.print(demo.population.getFittest().genes[i*panjangTabel + j] + " ");
+            }
+            System.out.println("");
         }
         System.out.println("");
     }
     //Selection
-     void selection() {
+    void selection() {
         //Select the most fittest individual
-        fittest = population.getFittest();
-        //Select the second most fittest individual
-        secondFittest = population.getSecondFittest();
+        fittest = new Population();
+        fittest.initializeNewPopulation(population.getParentsPopulation(), population.table);
     } 
     //Crossover
     void crossover() {
         Random rn = new Random();
         //Select a random crossover point
-        int crossOverPoint = rn.nextInt(population.individuals[0].geneLength);
+        int crossOverPoint = Math.abs(rn.nextInt(fittest.individuals[0].geneLength));
         //Swap values among parents
-        
+        for(int i =0; i < fittest.individuals.length; i+=2){
+            for (int j = 0; j < crossOverPoint; j++) {
+                int temp = fittest.individuals[i].genes[j];
+                fittest.individuals[i].genes[j] = fittest.individuals[i+1].genes[j];
+                fittest.individuals[i+1].genes[j]= temp;
+            }
+        }
     }
     
     //Mutation
-    void mutation() {
+    void mutation(int idx) {
         Random rn = new Random();
         //Select a random mutation point
-        int mutationPoint = rn.nextInt(population.individuals[0].geneLength);
+        int mutationPoint = rn.nextInt(fittest.individuals[0].geneLength);
         //Flip values at the mutation point
-        if (fittest.genes[mutationPoint] == 0) {
-            fittest.genes[mutationPoint] = 1;
-        } else {
-            fittest.genes[mutationPoint] = 0;
-        }
-        mutationPoint = rn.nextInt(population.individuals[0].geneLength);
-        if (secondFittest.genes[mutationPoint] == 0) {
-            secondFittest.genes[mutationPoint] = 1;
-        } else {
-            secondFittest.genes[mutationPoint] = 0;
+        if(fittest.individuals[idx].genes[mutationPoint] == 0){
+            fittest.individuals[idx].genes[mutationPoint] = 1;
+        }else{
+            fittest.individuals[idx].genes[mutationPoint] = 0;
         }
     }
     //Get fittest offspring
     Individual getFittestOffspring() {
-        if (fittest.fitness > secondFittest.fitness) {
-            return fittest;
-        }
-        return secondFittest;
+        return population.getFittest();
     }
     
-    //Replace least fittest individual from most fittest offspring
-    void addFittestOffspring() {
-
-        //Update fitness values of offspring
-        fittest.calcFitness();
-        secondFittest.calcFitness();
-
-        //Get index of least fit individual
-        int leastFittestIndex = population.getLeastFittestIndex();
-
-        //Replace least fittest individual from most fittest offspring
-        population.individuals[leastFittestIndex] = getFittestOffspring();
+    //Menggantikan populasi yang lama menjadi populasi yang baru
+    void newPopulation() {
+        population = new Population();
+        population.initializeNewPopulation(fittest.individuals, fittest.table);
     }
-    
 }
