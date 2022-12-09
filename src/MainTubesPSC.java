@@ -15,7 +15,7 @@ public class MainTubesPSC {
     Population population = new Population();
     Population fittest;
     int popsize;
-    int generationCount = 0;
+    long generationCount = 0;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random rn = new Random();
