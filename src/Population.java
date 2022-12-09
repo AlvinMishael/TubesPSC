@@ -62,7 +62,8 @@ class Population {
             totalSum += this.individuals[i].fitness;
         }
         Random rd = new Random();
-        int rand = rd.nextInt(totalSum);
+        int rand = rd.nextInt(totalSum-1);
+        rand++;
         int sum = 0;
         for(int i =0; i < this.popSize; i++){
             sum += this.individuals[i].fitness;
