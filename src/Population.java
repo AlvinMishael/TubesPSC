@@ -15,6 +15,7 @@ class Population {
     int popSize;
     Individual[] individuals;
     int fittest = 0;
+    int leastFittest = 0;
     int[] table; 
     //Inisialisasi populasi dari array of Individual
     public void initializeNewPopulation(Individual[] individuals, int[] table ){
@@ -46,6 +47,20 @@ class Population {
         }
         fittest = individuals[maxFitIndex].fitness;
         return individuals[maxFitIndex];
+    }
+    
+    //Get the least fittest individual
+    public Individual getLeastFittest() {
+        int minFit = Integer.MAX_VALUE;
+        int minFitIndex = 0;
+        for (int i = 0; i < individuals.length; i++) {
+            if (minFit >= individuals[i].fitness) {
+                minFit = individuals[i].fitness;
+                minFitIndex = i;
+            }
+        }
+        leastFittest = individuals[minFitIndex].fitness;
+        return individuals[minFitIndex];
     }
     
     public Individual[] getParentsPopulation(){
@@ -80,5 +95,6 @@ class Population {
             individual.calcFitness();
         }
         getFittest();
+        getLeastFittest();
     }
 }

@@ -47,12 +47,14 @@ class Individual {
 
     //Calculate fitness
     public void calcFitness() {
-        fitness = 100;
+        int counter = 0;
+        int angkaSalah = 0;
+        fitness = tabel.length*tabel.length*9;
         int len = (int)Math.sqrt(tabel.length);
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < len; i++){
            for(int j =0; j < len;j++){
                if(tabel[((i*len) + j)] != -1){
-                   int counter = 0;
+                   counter = 0;
                    if(i != 0 && i != (len-1)){
                        if(j != 0 && j != (len-1)){
                            for(int k = i-1; k <= i +1; k++){
@@ -133,9 +135,13 @@ class Individual {
                        }
                    }
                    int beda = Math.abs(counter-tabel[((i*len) + j)]);
-                   this.fitness -= beda;
+                   if(beda != 0){
+                       angkaSalah++;
+                       counter += beda;
+                   }
                }
            }
         }
+        this.fitness  = this.fitness - (angkaSalah * counter);
     }
 }

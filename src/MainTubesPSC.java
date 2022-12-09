@@ -15,10 +15,10 @@ public class MainTubesPSC {
     Population population = new Population();
     Population fittest;
     int popsize;
-    long generationCount = 0;
+    long generationCount = 1;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Random rn = new Random();
+        Random rand = new Random();
         MainTubesPSC demo = new MainTubesPSC();
         System.out.print("Ukuran Populasi Awal: ");
         int popSize = sc.nextInt();
@@ -31,29 +31,27 @@ public class MainTubesPSC {
         }
         //Initialize population
         demo.population.initializePopulation(popSize, panjangTabel*panjangTabel, tabel);
-        //Calculate fitness of each individual
-        demo.population.calculateFitness();
-        System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.population.fittest);
         //While population gets an individual with maximum fitness
-        while (demo.population.fittest < 100) {
-            ++demo.generationCount;
-            //Do selection
-            demo.selection();
-            //Do crossover
-            demo.crossover();
-            //Do mutation under a random probability
-            for(int i = 0; i < popSize; i++){
-                if (rn.nextInt()%10000 < 1) {
-                    demo.mutation(i);
-                }
-            }
-            //Add fittest offspring to population
-            demo.newPopulation();
+        do{
             //Calculate new fitness value
             demo.population.calculateFitness();
-
-            System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.population.fittest);
-        }
+            System.out.println("Generation: " + demo.generationCount + " Fittest: " + demo.population.fittest +" Least Fittest: " +demo.population.leastFittest);
+            demo.generationCount++;
+            if(demo.population.fittest < panjangTabel*panjangTabel*panjangTabel*panjangTabel*9){
+                //Do selection
+                demo.selection();
+                //Do crossover
+                demo.crossover();
+                //Do mutation under a random probability
+                for(int i = 0; i < popSize; i++){
+                    if (rand.nextInt(10000) < 1) {
+                        demo.mutation(i);
+                    }
+                }
+                //Add fittest offspring to population
+                demo.newPopulation();
+            }
+        }while (demo.population.fittest < panjangTabel*panjangTabel*panjangTabel*panjangTabel*9);
         System.out.println("\nSolution found in generation " + demo.generationCount);
         System.out.println("Fitness: "+demo.population.getFittest().fitness);
         System.out.println("Genes: ");
@@ -73,9 +71,9 @@ public class MainTubesPSC {
     } 
     //Crossover
     void crossover() {
-        Random rn = new Random();
+        Random rand = new Random();
         //Select a random crossover point
-        int crossOverPoint = Math.abs(rn.nextInt(fittest.individuals[0].geneLength));
+        int crossOverPoint = Math.abs(rand.nextInt(fittest.individuals[0].geneLength));
         //Swap values among parents
         for(int i =0; i < fittest.individuals.length; i+=2){
             for (int j = 0; j < crossOverPoint; j++) {
@@ -88,9 +86,9 @@ public class MainTubesPSC {
     
     //Mutation
     void mutation(int idx) {
-        Random rn = new Random();
+        Random rand = new Random();
         //Select a random mutation point
-        int mutationPoint = rn.nextInt(fittest.individuals[0].geneLength);
+        int mutationPoint = rand.nextInt(fittest.individuals[0].geneLength);
         //Flip values at the mutation point
         if(fittest.individuals[idx].genes[mutationPoint] == 0){
             fittest.individuals[idx].genes[mutationPoint] = 1;
