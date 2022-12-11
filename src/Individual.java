@@ -14,39 +14,39 @@ class Individual {
 
     int fitness;
     int geneLength;
-    int[] genes;
+    int[] arrGene;
     int[] tabel;
     
     public Individual(Individual curr){
         this.geneLength = curr.geneLength;
         this.fitness = curr.fitness;
-        this.genes = new int[curr.genes.length];
-        System.arraycopy(curr.genes, 0, this.genes, 0, curr.genes.length);
+        this.arrGene = new int[curr.arrGene.length];
+        System.arraycopy(curr.arrGene, 0, this.arrGene, 0, curr.arrGene.length);
         this.tabel = new int[curr.tabel.length];
         System.arraycopy(curr.tabel, 0, this.tabel, 0, curr.tabel.length);
     }
     
 
     public Individual(int geneLength, int[] tabel) {
-        Random rn = new Random();
+        Random rand = new Random();
         this.geneLength = geneLength;
-        this.genes = new int[geneLength];
-        //Set genes randomly for each individual
-        for (int i = 0; i < genes.length; i++) {
-            genes[i] = Math.abs(rn.nextInt() % 2);
+        this.arrGene = new int[geneLength];
+        //Set arrGene randomly for each individual
+        for (int i = 0; i < arrGene.length; i++) {
+            arrGene[i] = Math.abs(rand.nextInt() % 2);
         }
         this.tabel = new int[tabel.length];
         System.arraycopy(tabel, 0, this.tabel, 0, tabel.length);
         fitness = 100;
     }
     
-    public void setTable(int[] tabel){
+    public void setTabel(int[] tabel){
         this.tabel = new int[tabel.length];
         System.arraycopy(tabel, 0, this.tabel, 0, tabel.length);
     }
 
     //Calculate fitness
-    public void calcFitness() {
+    public void nilaiFitness() {
         int counter = 0;
         int angkaSalah = 0;
         fitness = tabel.length*tabel.length*9;
@@ -59,7 +59,7 @@ class Individual {
                        if(j != 0 && j != (len-1)){
                            for(int k = i-1; k <= i +1; k++){
                                for(int p = j-1; p <= j +1; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -67,7 +67,7 @@ class Individual {
                        }else if(j == 0){
                            for(int k = i-1; k <= i +1 ; k++){
                                for(int p = j; p <= j+1; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -75,7 +75,7 @@ class Individual {
                        }else if(j == (len-1)){
                            for(int k = i-1; k <= i +1 ; k++){
                                for(int p = j-1; p <= j; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -85,7 +85,7 @@ class Individual {
                        if(j != 0 && j != (len-1)){
                            for(int k = i; k <= i +1; k++){
                                for(int p = j-1; p <= j +1; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -93,7 +93,7 @@ class Individual {
                        }else if(j == 0){
                            for(int k = i; k <= i +1 ; k++){
                                for(int p = j; p <= j+1; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -101,7 +101,7 @@ class Individual {
                        }else if(j == (len-1)){
                            for(int k = i; k <= i +1 ; k++){
                                for(int p = j-1; p <= j; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -111,7 +111,7 @@ class Individual {
                        if(j != 0 && j != (len-1)){
                            for(int k = i-1; k <= i ; k++){
                                for(int p = j-1; p <= j +1; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -119,7 +119,7 @@ class Individual {
                        }else if(j == 0){
                            for(int k = i-1; k <= i  ; k++){
                                for(int p = j; p <= j+1; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
@@ -127,7 +127,7 @@ class Individual {
                        }else if(j == (len-1)){
                            for(int k = i-1; k <= i ; k++){
                                for(int p = j-1; p <= j; p++){
-                                   if(genes[k*len + p] == 1){
+                                   if(arrGene[k*len + p] == 1){
                                        counter++;
                                    }
                                }
