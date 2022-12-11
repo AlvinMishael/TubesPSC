@@ -9,28 +9,27 @@
  * @author Alvin
  */
 
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 public class MainTubesPSC {
-    Population population = new Population();
-    Population fittest;
-    int popsize;
+    Population population = new Population();   //Men-generate populasi 
+    Population fittest;                         
+    int populationSize;
     long generationCount = 1;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random rand = new Random();
         MainTubesPSC demo = new MainTubesPSC();
         System.out.print("Ukuran Populasi Awal: ");
-        int popSize = sc.nextInt();
+        int populationSize = sc.nextInt();
         System.out.print("Ukuran tabel: ");
         int panjangTabel = sc.nextInt();
         int[] tabel = new int[panjangTabel*panjangTabel];
-        System.out.println("Masukan tabel:");
+        System.out.println("Masukan tabel: ");
         for(int i =0; i < panjangTabel*panjangTabel; i++){
             tabel[i] = sc.nextInt();
         }
         //Initialize population
-        demo.population.initializePopulation(popSize, panjangTabel*panjangTabel, tabel);
+        demo.population.initializePopulation(populationSize, panjangTabel*panjangTabel, tabel);
         //While population gets an individual with maximum fitness
         do{
             //Calculate new fitness value
@@ -43,7 +42,7 @@ public class MainTubesPSC {
                 //Do crossover
                 demo.crossover();
                 //Do mutation under a random probability
-                for(int i = 0; i < popSize; i++){
+                for(int i = 0; i < populationSize; i++){
                     if (rand.nextInt(10000) < 1) {
                         demo.mutation(i);
                     }
@@ -64,46 +63,46 @@ public class MainTubesPSC {
         System.out.println("");
     }
     //Selection
-    void selection() {
+    public void selection() {
         //Select the most fittest individual
         fittest = new Population();
         fittest.initializeNewPopulation(population.getParentsPopulation(), population.table);
     } 
     //Crossover
-    void crossover() {
+    public void crossover() {
         Random rand = new Random();
         //Select a random crossover point
-        int crossOverPoint = Math.abs(rand.nextInt(fittest.individuals[0].geneLength));
+        int crossOverPoint = Math.abs(rand.nextInt(fittest.arrIndividual[0].geneLength));
         //Swap values among parents
-        for(int i =0; i < fittest.individuals.length; i+=2){
+        for(int i =0; i < fittest.arrIndividual.length; i+=2){
             for (int j = 0; j < crossOverPoint; j++) {
-                int temp = fittest.individuals[i].genes[j];
-                fittest.individuals[i].genes[j] = fittest.individuals[i+1].genes[j];
-                fittest.individuals[i+1].genes[j]= temp;
+                int temp = fittest.arrIndividual[i].genes[j];
+                fittest.arrIndividual[i].genes[j] = fittest.arrIndividual[i+1].genes[j];
+                fittest.arrIndividual[i+1].genes[j]= temp;
             }
         }
     }
     
     //Mutation
-    void mutation(int idx) {
+    public void mutation(int idx) {
         Random rand = new Random();
         //Select a random mutation point
-        int mutationPoint = rand.nextInt(fittest.individuals[0].geneLength);
+        int mutationPoint = rand.nextInt(fittest.arrIndividual[0].geneLength);
         //Flip values at the mutation point
-        if(fittest.individuals[idx].genes[mutationPoint] == 0){
-            fittest.individuals[idx].genes[mutationPoint] = 1;
+        if(fittest.arrIndividual[idx].genes[mutationPoint] == 0){
+            fittest.arrIndividual[idx].genes[mutationPoint] = 1;
         }else{
-            fittest.individuals[idx].genes[mutationPoint] = 0;
+            fittest.arrIndividual[idx].genes[mutationPoint] = 0;
         }
     }
     //Get fittest offspring
-    Individual getFittestOffspring() {
+    public Individual getFittestOffspring() {
         return population.getFittest();
     }
     
     //Menggantikan populasi yang lama menjadi populasi yang baru
-    void newPopulation() {
+    public void newPopulation() {
         population = new Population();
-        population.initializeNewPopulation(fittest.individuals, fittest.table);
+        population.initializeNewPopulation(fittest.arrIndividual, fittest.table);
     }
 }
