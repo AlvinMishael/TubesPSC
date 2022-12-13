@@ -15,6 +15,7 @@ public class MainTubesPSC {
     Population fitness;                         
     int ukuranPopulasi;
     long generationCount = 1;
+    static int totalAngkaTabel;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random rand = new Random();
@@ -25,18 +26,22 @@ public class MainTubesPSC {
         int panjangTabel = sc.nextInt();
         int[] tabel = new int[panjangTabel*panjangTabel];
         System.out.println("Masukan tabel: ");
+        totalAngkaTabel =0;
         for(int i =0; i < panjangTabel*panjangTabel; i++){
             tabel[i] = sc.nextInt();
+            if(tabel[i] != -1){
+                totalAngkaTabel ++;
+            }
         }
         //Initialize population
-        demo.populasi.inisialisasiPopulasi(ukuranPopulasi, panjangTabel*panjangTabel, tabel);
+        demo.populasi.inisialisasiPopulasi(ukuranPopulasi, panjangTabel*panjangTabel, tabel, totalAngkaTabel);
         //While population gets an individual with maximum fitness
         do{
             //Calculate new fitness value
             demo.populasi.hitungFittest();
-            System.out.println("Generation: " + demo.generationCount + " Fitness: " + demo.populasi.fittest +" Least Fitness: " +demo.populasi.leastFittest);
+            System.out.println("Generasi: " + demo.generationCount + " Fitness terbesar: " + demo.populasi.fittest +" Fitness terkecil: " +demo.populasi.leastFittest);
             demo.generationCount++;
-            if(demo.populasi.fittest < panjangTabel*panjangTabel*panjangTabel*panjangTabel*9){
+            if(demo.populasi.fittest < totalAngkaTabel*10*9){
                 //Do selection
                 demo.selection();
                 //Do crossover
@@ -50,8 +55,8 @@ public class MainTubesPSC {
                 //Add fittest offspring to population
                 demo.newPopulation();
             }
-        }while (demo.populasi.fittest < panjangTabel*panjangTabel*panjangTabel*panjangTabel*9);
-        System.out.println("\n Jumlah Solusi " + demo.generationCount);
+        }while (demo.populasi.fittest < totalAngkaTabel * 10*9);
+        System.out.println("Solusi berada pada generasi: " + demo.generationCount);
         System.out.println("Fitness: "+ demo.populasi.getFittest().fitness);
         System.out.println("genes: ");
         for (int i = 0; i < panjangTabel; i++) {
@@ -66,19 +71,28 @@ public class MainTubesPSC {
     public void selection() {
         //Select the most fittest individual
         fitness = new Population();
-        fitness.inisialisasiPopulasiBaru(populasi.getarrParentPopulation(), populasi.table);
+        fitness.inisialisasiPopulasiBaru(populasi.getarrParentPopulation(), populasi.tabel, totalAngkaTabel);
     } 
     //Crossover
     public void crossover() {
         Random rand = new Random();
         //Select a random crossover point
-        int crossOverPoint = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength));
+        int titikCrossoverPertama = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength-2));
+        titikCrossoverPertama++;
+        int titikCrossoverKedua = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength-2));
+        titikCrossoverKedua++;
+        while(titikCrossoverPertama == titikCrossoverKedua){
+            titikCrossoverKedua = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength-2));
+            titikCrossoverKedua++;
+        }
         //Swap values among parents
         for(int i =0; i < fitness.arrIndividual.length; i+=2){
-            for (int j = 0; j < crossOverPoint; j++) {
-                int temp = fitness.arrIndividual[i].arrGene[j];
-                fitness.arrIndividual[i].arrGene[j] = fitness.arrIndividual[i+1].arrGene[j];
-                fitness.arrIndividual[i+1].arrGene[j]= temp;
+            for (int j = 0; j < fitness.arrIndividual[i].geneLength; j++) {
+                if((j <titikCrossoverPertama && j > titikCrossoverKedua)|| (j < titikCrossoverKedua && j > titikCrossoverPertama )){
+                    int temp = fitness.arrIndividual[i].arrGene[j];
+                    fitness.arrIndividual[i].arrGene[j] = fitness.arrIndividual[i+1].arrGene[j];
+                    fitness.arrIndividual[i+1].arrGene[j]= temp;
+                }
             }
         }
     }
@@ -103,6 +117,6 @@ public class MainTubesPSC {
     //Menggantikan populasi yang lama menjadi populasi yang baru
     public void newPopulation() {
         populasi = new Population();
-        populasi.inisialisasiPopulasiBaru(fitness.arrIndividual, fitness.table);
+        populasi.inisialisasiPopulasiBaru(fitness.arrIndividual, fitness.tabel, totalAngkaTabel);
     }
 }

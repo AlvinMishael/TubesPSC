@@ -16,22 +16,25 @@ class Population {
     Individual[] arrIndividual;
     int fittest = 0;
     int leastFittest = 0;
-    int[] table; 
+    int[] tabel; 
+    int totalAngkaTabel;
     //Inisialisasi populasi dari array of Individual
-    public void inisialisasiPopulasiBaru(Individual[] arrIndividual, int[] table ){
-        this.table = table;
+    public void inisialisasiPopulasiBaru(Individual[] arrIndividual, int[] table, int totalAngkaTabel){
+        this.totalAngkaTabel = totalAngkaTabel;
+        this.tabel = table;
         this.ukuranPopulasi = arrIndividual.length;
         this.arrIndividual = new Individual[arrIndividual.length];
         System.arraycopy(arrIndividual, 0, this.arrIndividual, 0, arrIndividual.length);
     }
 
     //Inisialisasi Populasi
-    public void inisialisasiPopulasi(int size, int geneLength, int[] tabel) {
-        this.table = tabel;
+    public void inisialisasiPopulasi(int size, int geneLength, int[] tabel, int totalAngkaTabel) {
+        this.totalAngkaTabel = totalAngkaTabel;
+        this.tabel = tabel;
         this.ukuranPopulasi = size;
         this.arrIndividual = new Individual[this.ukuranPopulasi];
         for (int i = 0; i < arrIndividual.length; i++) {
-            arrIndividual[i] = new Individual(geneLength, tabel);
+            arrIndividual[i] = new Individual(geneLength, tabel, totalAngkaTabel);
         }
     }
 
