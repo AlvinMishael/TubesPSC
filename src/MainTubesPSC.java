@@ -114,7 +114,7 @@ public class MainTubesPSC {
         return populasi.getFittest();
     }
     
-    //Menggantikan populasi yang lama menjadi populasi yang baru
+    //Menggantikan populasi yang lama menjadi populasi yang baru.
     public void newPopulation() {
         populasi = new Population();
         populasi.inisialisasiPopulasiBaru(fitness.arrIndividual, fitness.tabel, totalAngkaTabel);
