@@ -9,18 +9,20 @@
  * @author alvin
  */
 import java.util.Random;
-//Population class
+//Kelas untuk menjadi populasi kromosom
 class Population {
-    static int ukuranPopulasi;
-    static int[] tabel; 
-    static int totalAngkaTabel;
-    Individual[] arrIndividual;
-    int fittest = 0;
-    int leastFittest = 0;
-    //Inisialisasi populasi dari array of Individual
+    //Variabel dibuat static karena hany perlu diinisialsasi sekali saja
+    static int ukuranPopulasi;//Variabel ukuranPopulasi untuk menyimpan banyaknya kromosom untuk setiap populasi
+    static int[] tabel;//Variable tabel untuk menyimpan tabel soal yang dimasukan
+    static int totalAngkaTabel;//Variable totalAngkaTabel untuk menghitung banyaknya angka yang berada pada tabel soal
+    
+    Individual[] arrIndividual;//Variabel arrIndividual untuk merepresentasikan populasi 
+    int fittest;//Variabel fittest untuk menyimpan fitness terbaik dari sebuah populasi
+    int leastFittest;//Variabel leastFittest untuk menyimpan fitness terburuk dari sebuah populasi
+    //Metod untuk menginisialisasi populasi baru menggunakan hanya array of Individual
     public void inisialisasiPopulasiBaru(Individual[] arrIndividual){
-        this.arrIndividual = new Individual[arrIndividual.length];
-        System.arraycopy(arrIndividual, 0, this.arrIndividual, 0, arrIndividual.length);
+        this.arrIndividual = new Individual[ukuranPopulasi];
+        System.arraycopy(arrIndividual, 0, this.arrIndividual, 0, ukuranPopulasi);
     }
 
     //Inisialisasi Populasi dari variable ukuran
@@ -34,7 +36,7 @@ class Population {
         }
     }
 
-    //Get the fittest individual
+    //Metode untuk mendapatkan individu terbaik
     public Individual individuTerbaik() {
         int maxfittest = Integer.MIN_VALUE;
         int idx_maxfittest = 0;
@@ -48,7 +50,7 @@ class Population {
         return arrIndividual[idx_maxfittest];
     }
     
-    //Get the least fittest individual
+    //Metode untuk mendapatkan individu terburuk
     public Individual individuTerburuk() {
         int minFittest = Integer.MAX_VALUE;
         int idx_minFittest = 0;
