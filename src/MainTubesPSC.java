@@ -11,112 +11,50 @@
 
 import java.util.*;
 public class MainTubesPSC {
-    Population populasi = new Population();   //Men-generate populasi 
-    Population fitness;                         
-    int ukuranPopulasi;
-    long generationCount = 1;
-    static int totalAngkaTabel;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         Random rand = new Random();
-        MainTubesPSC demo = new MainTubesPSC();
         System.out.print("Ukuran Populasi Awal: ");
         int ukuranPopulasi = sc.nextInt();
         System.out.print("Ukuran tabel: ");
         int panjangTabel = sc.nextInt();
-        int[] tabel = new int[panjangTabel*panjangTabel];
-        System.out.println("Masukan tabel: ");
-        totalAngkaTabel =0;
-        for(int i =0; i < panjangTabel*panjangTabel; i++){
+        //Menginisialisi panjangTabel dengan kuadrat dari input, karena untuk memetakan array 2 dimensi ke 1 dimensi maka panjang tabel 1 dimensi merupakan kuadrat dari
+        //panjang array 2 dimensi (contoh: array 2 dimensi dengan ukuran 5x5 diubah menjadi array 1 dimensi memerlukan ukuran 25
+        panjangTabel = panjangTabel *panjangTabel;
+        int[] tabel = new int[panjangTabel];
+        System.out.println("Masukan tabel: (-1 = kotak kosong)");
+        int totalAngkaTabel =0;
+        for(int i =0; i < panjangTabel; i++){
             tabel[i] = sc.nextInt();
             if(tabel[i] != -1){
                 totalAngkaTabel ++;
             }
         }
-        //Initialize population
-        demo.populasi.inisialisasiPopulasi(ukuranPopulasi, panjangTabel*panjangTabel, tabel, totalAngkaTabel);
-        //While population gets an individual with maximum fitness
+        Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel);
         do{
-            //Calculate new fitness value
-            demo.populasi.hitungFittest();
-            System.out.println("Generasi: " + demo.generationCount + " Fitness terbesar: " + demo.populasi.fittest +" Fitness terkecil: " +demo.populasi.leastFittest);
-            demo.generationCount++;
-            if(demo.populasi.fittest < totalAngkaTabel*10*9){
-                //Do selection
-                demo.selection();
-                //Do crossover
-                demo.crossover();
-                //Do mutation under a random probability
-                for(int i = 0; i < ukuranPopulasi; i++){
+            generasi.populasi.hitungFitness();
+            System.out.println("Generasi ke-" + generasi.generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
+            generasi.generationCount++;
+            if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){
+                generasi.seleksiParent();
+                generasi.crossover();
+                for(int i = 0; i < generasi.ukuranPopulasi; i++){
                     if (rand.nextInt(10000) < 1) {
-                        demo.mutation(i);
+                        generasi.mutation(i);
                     }
                 }
-                //Add fittest offspring to population
-                demo.newPopulation();
+                generasi.generasiBerikut();
             }
-        }while (demo.populasi.fittest < totalAngkaTabel * 10*9);
-        System.out.println("Solusi berada pada generasi: " + demo.generationCount);
-        System.out.println("Fitness: "+ demo.populasi.getFittest().fitness);
-        System.out.println("genes: ");
-        for (int i = 0; i < panjangTabel; i++) {
-            for(int j =0; j < panjangTabel; j++){
-                System.out.print(demo.populasi.getFittest().arrGene[i*panjangTabel + j] + " ");
+        }while (generasi.populasi.fittest < generasi.totalAngkaTabel * 10*9);
+        System.out.println("Generasi terbaik berada pada generasi populasi ke-" + generasi.generationCount);
+        System.out.println("Dengan Fitness: "+ generasi.populasi.fittest);
+        System.out.println("Genes solusi: ");
+        int len = (int) Math.sqrt(panjangTabel);
+        for (int i = 0; i < len; i++) {
+            for(int j =0; j < len; j++){
+                System.out.print(generasi.populasi.individuTerbaik().arrGene[i*len + j] + " ");
             }
             System.out.println("");
         }
-        System.out.println("");
-    }
-    //Selection
-    public void selection() {
-        //Select the most fittest individual
-        fitness = new Population();
-        fitness.inisialisasiPopulasiBaru(populasi.getarrParentPopulation(), populasi.tabel, totalAngkaTabel);
-    } 
-    //Crossover
-    public void crossover() {
-        Random rand = new Random();
-        //Select a random crossover point
-        int titikCrossoverPertama = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength-2));
-        titikCrossoverPertama++;
-        int titikCrossoverKedua = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength-2));
-        titikCrossoverKedua++;
-        while(titikCrossoverPertama == titikCrossoverKedua){
-            titikCrossoverKedua = Math.abs(rand.nextInt(fitness.arrIndividual[0].geneLength-2));
-            titikCrossoverKedua++;
-        }
-        //Swap values among parents
-        for(int i =0; i < fitness.arrIndividual.length; i+=2){
-            for (int j = 0; j < fitness.arrIndividual[i].geneLength; j++) {
-                if((j <titikCrossoverPertama && j > titikCrossoverKedua)|| (j < titikCrossoverKedua && j > titikCrossoverPertama )){
-                    int temp = fitness.arrIndividual[i].arrGene[j];
-                    fitness.arrIndividual[i].arrGene[j] = fitness.arrIndividual[i+1].arrGene[j];
-                    fitness.arrIndividual[i+1].arrGene[j]= temp;
-                }
-            }
-        }
-    }
-    
-    //Mutation
-    public void mutation(int idx) {
-        Random rand = new Random();
-        //Select a random mutation point
-        int mutationPoint = rand.nextInt(fitness.arrIndividual[0].geneLength);
-        //Flip values at the mutation point
-        if(fitness.arrIndividual[idx].arrGene[mutationPoint] == 0){
-            fitness.arrIndividual[idx].arrGene[mutationPoint] = 1;
-        }else{
-            fitness.arrIndividual[idx].arrGene[mutationPoint] = 0;
-        }
-    }
-    //Get fittest offspring
-    public Individual getFitnessOffspring() {
-        return populasi.getFittest();
-    }
-    
-    //Menggantikan populasi yang lama menjadi populasi yang baru.
-    public void newPopulation() {
-        populasi = new Population();
-        populasi.inisialisasiPopulasiBaru(fitness.arrIndividual, fitness.tabel, totalAngkaTabel);
     }
 }

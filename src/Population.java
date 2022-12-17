@@ -11,23 +11,19 @@
 import java.util.Random;
 //Population class
 class Population {
-
-    int ukuranPopulasi;
+    static int ukuranPopulasi;
+    static int[] tabel; 
+    static int totalAngkaTabel;
     Individual[] arrIndividual;
     int fittest = 0;
     int leastFittest = 0;
-    int[] tabel; 
-    int totalAngkaTabel;
     //Inisialisasi populasi dari array of Individual
-    public void inisialisasiPopulasiBaru(Individual[] arrIndividual, int[] table, int totalAngkaTabel){
-        this.totalAngkaTabel = totalAngkaTabel;
-        this.tabel = table;
-        this.ukuranPopulasi = arrIndividual.length;
+    public void inisialisasiPopulasiBaru(Individual[] arrIndividual){
         this.arrIndividual = new Individual[arrIndividual.length];
         System.arraycopy(arrIndividual, 0, this.arrIndividual, 0, arrIndividual.length);
     }
 
-    //Inisialisasi Populasi
+    //Inisialisasi Populasi dari variable ukuran
     public void inisialisasiPopulasi(int size, int geneLength, int[] tabel, int totalAngkaTabel) {
         this.totalAngkaTabel = totalAngkaTabel;
         this.tabel = tabel;
@@ -39,7 +35,7 @@ class Population {
     }
 
     //Get the fittest individual
-    public Individual getFittest() {
+    public Individual individuTerbaik() {
         int maxfittest = Integer.MIN_VALUE;
         int idx_maxfittest = 0;
         for (int i = 0; i < arrIndividual.length; i++) {
@@ -53,7 +49,7 @@ class Population {
     }
     
     //Get the least fittest individual
-    public Individual getLeastFittest() {
+    public Individual individuTerburuk() {
         int minFittest = Integer.MAX_VALUE;
         int idx_minFittest = 0;
         for (int i = 0; i < arrIndividual.length; i++) {
@@ -93,11 +89,11 @@ class Population {
     }
 
     //Calculate fittest of each individual
-    public void hitungFittest() {
+    public void hitungFitness() {
         for (Individual individual : arrIndividual) {
             individual.nilaiFitness();
         }
-        getFittest();
-        getLeastFittest();
+        this.individuTerbaik();
+        this.individuTerburuk();
     }
 }
