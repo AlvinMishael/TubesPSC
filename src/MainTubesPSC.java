@@ -38,13 +38,13 @@ public class MainTubesPSC {
             if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){ //selama belum menemukan hasil yang optimal,
                 generasi.seleksiParent(); //lakukan pencarian parent
                 generasi.crossover(); //kemudian crossover
-                //dan kemungkinan terjadinya mutasi dalam membentuk generasi baru
+                //dan kemungkinan terjadinya mutasi dalam membentuk generasi baru adalah 1/10000 untuk setiap anggota dalam populasi
                 for(int i = 0; i < generasi.ukuranPopulasi; i++){
-                    if (rand.nextInt(10000) < 1) {
-                        generasi.mutation(i);
+                    if (rand.nextInt(10000) < 1) {//Jika masuk kedalam kemungkinan mutaasi
+                        generasi.mutation(i);//Maka lakukan mutasi untuk individu tersebut
                     }
                 }
-                generasi.generasiBerikut();
+                generasi.generasiBerikut();//Melakukan inisialisasi generasi berikutnya menggunakan method generasi
             }
         }while (generasi.populasi.fittest < generasi.totalAngkaTabel * 10*9);
         System.out.println("Generasi terbaik berada pada generasi populasi ke-" + generasi.generationCount);
