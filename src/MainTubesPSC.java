@@ -50,7 +50,7 @@ public class MainTubesPSC {
             }
         }
         fileReader.close();
-        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(namaFile+ "Res"));
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(namaFile.substring(namaFile.length()-4)+ "Res.txt"));
         long generationCount = 1; //Membuat atribut untuk menghitung generasi
         Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel, rand, banyakElitism); //inisiasi generasi baru
         do{ //lakukan pencarian generasi baru untuk menemukan hasil selama fittest masih kurang dari
