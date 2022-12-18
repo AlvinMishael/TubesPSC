@@ -118,7 +118,7 @@ class Population {
             }else{
                 return -1;
             }
-        });//Mengurut kan fitness dari array 2d menggunakan lambda dan method arrays.sort dari library kecil ke besar
+        });//Mengurutkan fitness dari array 2d menggunakan lambda dan method arrays.sort dari library kecil ke besar
         int randomPoint;//Membuat variabel untuk menyimpan titik random
         if(ukuranPopulasi%2 == 0){
             randomPoint = rand.nextInt((ukuranPopulasi/2)*(ukuranPopulasi+1));//jika ukuranPopulasi genap maka perhitungan dilakukan dengan ukuranPopulasi dibagi 2 terlebih dahulu untuk meringankan perhitungan
@@ -149,7 +149,7 @@ class Population {
             }else{
                 return 1;
             }
-        });//Mengurut kan fitness dari array 2d menggunakan lambda dan method arrays.sort dari library dari besar ke kecil
+        });//Mengurutkan fitness dari array 2d menggunakan lambda dan method arrays.sort dari library dari besar ke kecil
         for(int i =0; i < elitism; i++){//For loop untuk memasukan individual yang unggul kepada array parent
             arr[i] = this.arrIndividual[arrTemp[i][1]];
         }
