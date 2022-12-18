@@ -25,7 +25,7 @@ import java.util.*;
 public class MainTubesPSC {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Path nama file input:");
+        System.out.print("Path nama file input: ");
         String namaFile = sc.next();
         FileInputStream fis = new FileInputStream(namaFile);
         Scanner fileReader = new Scanner(fis);

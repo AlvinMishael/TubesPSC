@@ -130,7 +130,7 @@ class Population {
         for(int i =1; i <= this.ukuranPopulasi; i++){//Menjalani dari 1 sampai ukuranPopulasi
             sum += i;//Dan menambahkan nya kepada variabel sum sementara
             if(sum >= randomPoint){//Jika variabel sum sementara sudah lebih sama dengan variabel random
-                return this.arrIndividual[arrTemp[i][1]];//Maka individual yang terpilih adalah individual yang fitnessnya berhasil membuat variabel sum lebih dari sama dengan random
+                return this.arrIndividual[arrTemp[i-1][1]];//Maka individual yang terpilih adalah individual yang fitnessnya berhasil membuat variabel sum lebih dari sama dengan random
             }
         }
         return null;
