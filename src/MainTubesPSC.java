@@ -23,21 +23,22 @@ public class MainTubesPSC {
         panjangTabel = panjangTabel *panjangTabel;
         int[] tabel = new int[panjangTabel];
         System.out.println("Masukan tabel: (-1 = kotak kosong)");
-        int totalAngkaTabel =0;
-        for(int i =0; i < panjangTabel; i++){
+        int totalAngkaTabel =0; //variable ini digunakan untuk menghitung kotak yg tidak kosong atau terisi angka
+        for(int i =0; i < panjangTabel; i++){ //input tabel mineswipper
             tabel[i] = sc.nextInt();
-            if(tabel[i] != -1){
-                totalAngkaTabel ++;
+            if(tabel[i] != -1){ //setiap ada input kotak yg berisi angka
+                totalAngkaTabel ++; //update jumlahnya
             }
         }
-        Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel);
-        do{
-            generasi.populasi.hitungFitness();
+        Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel); //inisiasi generasi baru
+        do{ //lakukan pencarian generasi baru untuk menemukan hasil selama fittest masih kurang dari
+            generasi.populasi.hitungFitness(); //menghitung fittest dari generasi baru
             System.out.println("Generasi ke-" + generasi.generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
-            generasi.generationCount++;
-            if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){
-                generasi.seleksiParent();
-                generasi.crossover();
+            generasi.generationCount++; //update jumlah generasi
+            if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){ //selama belum menemukan hasil yang optimal,
+                generasi.seleksiParent(); //lakukan pencarian parent
+                generasi.crossover(); //kemudian crossover
+                //dan kemungkinan terjadinya mutasi dalam membentuk generasi baru
                 for(int i = 0; i < generasi.ukuranPopulasi; i++){
                     if (rand.nextInt(10000) < 1) {
                         generasi.mutation(i);

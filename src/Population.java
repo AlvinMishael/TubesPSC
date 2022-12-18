@@ -38,40 +38,41 @@ class Population {
 
     //Metode untuk mendapatkan individu terbaik
     public Individual individuTerbaik() {
-        int maxfittest = Integer.MIN_VALUE;
-        int idx_maxfittest = 0;
-        for (int i = 0; i < arrIndividual.length; i++) {
-            if (maxfittest <= arrIndividual[i].fitness) {
-                maxfittest = arrIndividual[i].fitness;
-                idx_maxfittest = i;
+        int maxfittest = Integer.MIN_VALUE; //set maximum fittest dengan negatif infinit
+        int idx_maxfittest = 0; //index awal 0
+        for (int i = 0; i < arrIndividual.length; i++) { //loop sepanjang array untuk mencari fittest tertinggi
+            if (maxfittest <= arrIndividual[i].fitness) { //cek fittest individu ke-i lebih besar dari maxfittest saat ini
+                maxfittest = arrIndividual[i].fitness; //jika lebih besar, update maxfittest
+                idx_maxfittest = i; //update index individu yang punya maxfittest
             }
         }
-        fittest = arrIndividual[idx_maxfittest].fitness;
-        return arrIndividual[idx_maxfittest];
+        fittest = arrIndividual[idx_maxfittest].fitness; //update fittest
+        return arrIndividual[idx_maxfittest]; //kembalikan individu dengan fittest tertinggi
     }
     
     //Metode untuk mendapatkan individu terburuk
     public Individual individuTerburuk() {
-        int minFittest = Integer.MAX_VALUE;
-        int idx_minFittest = 0;
-        for (int i = 0; i < arrIndividual.length; i++) {
-            if (minFittest >= arrIndividual[i].fitness) {
-                minFittest = arrIndividual[i].fitness;
-                idx_minFittest = i;
+        int minFittest = Integer.MAX_VALUE; //set minimum fittest dengan positif infinit
+        int idx_minFittest = 0; //index awal 0
+        for (int i = 0; i < arrIndividual.length; i++) { //loop sepanjang array untuk mencari fittest terendah
+            if (minFittest >= arrIndividual[i].fitness) { //jika fittest individu ke-1 lebih kecil dari minFittest saat ini
+                minFittest = arrIndividual[i].fitness; //update minfittest
+                idx_minFittest = i; //update index individu yang punya minfittest
             }
         }
-        leastFittest = arrIndividual[idx_minFittest].fitness;
-        return arrIndividual[idx_minFittest];
+        leastFittest = arrIndividual[idx_minFittest].fitness; //update leastfittest
+        return arrIndividual[idx_minFittest]; //kembalikan individu dengan fittest terendah
     }
     
     public Individual[] getarrParentPopulation(){
-        Individual[] arrParent = new Individual[this.ukuranPopulasi];
-        for(int i =0; i < this.ukuranPopulasi; i++){
-            arrParent[i] = new Individual(this.rouletteWheelSelecetion());
+        Individual[] arrParent = new Individual[this.ukuranPopulasi]; //inisiasi array of individu untuk menyimpan parent
+        for(int i =0; i < this.ukuranPopulasi; i++){ //loop sebanyak ukuran populasi
+            arrParent[i] = new Individual(this.rouletteWheelSelecetion()); //setiap parent merupakan parent baru yang didapatkan dari selection menggunakan roulette
         }
-        return arrParent;
+        return arrParent; 
     }
     
+    //method roulette wheel untuk melakukan selection mencari parent dari populasi
     public Individual rouletteWheelSelecetion(){
         int totalSum = 0;
         for(int i =0; i < this.ukuranPopulasi; i++){
@@ -90,7 +91,7 @@ class Population {
         return null;
     }
 
-    //Calculate fittest of each individual
+    //menghitung fitness setiap individu
     public void hitungFitness() {
         for (Individual individual : arrIndividual) {
             individual.nilaiFitness();
