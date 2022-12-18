@@ -8,49 +8,72 @@
  *
  * @author Alvin
  */
+/*
+referensi:
+https://gist.github.com/Vini2/bd22b36ddc69c5327097921f5118b709 untuk kode genetic algorithm
 
+https://www.youtube.com/watch?v=9JzFcGdpT8E untuk roulette wheel selection
+
+https://linuxhint.com/sort-2d-array-in-java/ untuk sorting array 2d
+*/
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
 public class MainTubesPSC {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner sc = new Scanner(System.in);
-        Random rand = new Random();
-        System.out.print("Ukuran Populasi Awal: ");
-        int ukuranPopulasi = sc.nextInt();
-        System.out.print("Ukuran tabel: ");
-        int panjangTabel = sc.nextInt();
+        System.out.print("Path nama file input:");
+        String namaFile = sc.next();
+        FileInputStream fis = new FileInputStream(namaFile);
+        Scanner fileReader = new Scanner(fis);
+        long seedRandom = fileReader.nextLong();//Membuat variabel untuk variabel random
+        Random rand = new Random(seedRandom);
+        int ukuranPopulasi = fileReader.nextInt();//Menginisialisasi variabel untuk ukuran populasi
+        int panjangTabel = fileReader.nextInt();//Menginisialisasi variabel untuk panjang tabel
         //Menginisialisi panjangTabel dengan kuadrat dari input, karena untuk memetakan array 2 dimensi ke 1 dimensi maka panjang tabel 1 dimensi merupakan kuadrat dari
         //panjang array 2 dimensi (contoh: array 2 dimensi dengan ukuran 5x5 diubah menjadi array 1 dimensi memerlukan ukuran 25
         panjangTabel = panjangTabel *panjangTabel;
-        int[] tabel = new int[panjangTabel];
-        System.out.println("Masukan tabel: (-1 = kotak kosong)");
+        int batasGenerasi = fileReader.nextInt();//Menginisialisasi variabel untuk batas generasi yang akan dicoba
+        int probabilitasMutasi = fileReader.nextInt();//Menginisialisasi variabel untuk probabilitas mutasi (probabilitas akhir akan menjadi 1/probabilitasMutasi)
+        int[] tabel = new int[panjangTabel];//Membuat variabel untuk menyimpan soal pada array of int
+        int pilihanSelection = fileReader.nextInt();//Membuat variabel untuk memilih selection apa yang akan dilakukan 
+        int pilihanCrossover = fileReader.nextInt();//Membuat variabel untuk memilih crossover apa yang akan dilakukan 
+        int banyakElitism = fileReader.nextInt();//Membaut variabel untuk menentukan berapa banyak individu yang akan dipilih dalam proses elitism
         int totalAngkaTabel =0; //variable ini digunakan untuk menghitung kotak yg tidak kosong atau terisi angka
         for(int i =0; i < panjangTabel; i++){ //input tabel mineswipper
-            tabel[i] = sc.nextInt();
+            tabel[i] = fileReader.nextInt();
             if(tabel[i] != -1){ //setiap ada input kotak yg berisi angka
                 totalAngkaTabel ++; //update jumlahnya
             }
         }
-        Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel); //inisiasi generasi baru
+        long generationCount = 1; //Membuat atribut untuk menghitung generasi
+        Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel, rand, banyakElitism); //inisiasi generasi baru
         do{ //lakukan pencarian generasi baru untuk menemukan hasil selama fittest masih kurang dari
             generasi.populasi.hitungFitness(); //menghitung fittest dari generasi baru
-            System.out.println("Generasi ke-" + generasi.generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
-            generasi.generationCount++; //update jumlah generasi
+            System.out.println("Generasi ke-" + generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
+            generationCount++; //update jumlah generasi
             if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){ //selama belum menemukan hasil yang optimal,
-                generasi.seleksiParent(); //lakukan pencarian parent
-                generasi.crossover(); //kemudian crossover
+                generasi.seleksiParent(pilihanSelection); //lakukan pencarian parent
+                generasi.crossover(pilihanCrossover); //kemudian crossover
                 //dan kemungkinan terjadinya mutasi dalam membentuk generasi baru adalah 1/10000 untuk setiap anggota dalam populasi
                 for(int i = 0; i < generasi.ukuranPopulasi; i++){
-                    if (rand.nextInt(10000) < 1) {//Jika masuk kedalam kemungkinan mutaasi
+                    if (rand.nextInt(probabilitasMutasi) < 1) {//Jika masuk kedalam kemungkinan mutaasi
                         generasi.mutation(i);//Maka lakukan mutasi untuk individu tersebut
                     }
                 }
                 generasi.generasiBerikut();//Melakukan inisialisasi generasi berikutnya menggunakan method generasi
             }
-        }while (generasi.populasi.fittest < generasi.totalAngkaTabel * 10*9);
-        System.out.println("Generasi terbaik berada pada generasi populasi ke-" + generasi.generationCount);
-        System.out.println("Dengan Fitness: "+ generasi.populasi.fittest);
-        System.out.println("Genes solusi: ");
-        int len = (int) Math.sqrt(panjangTabel);
+        }while (generasi.populasi.fittest < generasi.totalAngkaTabel * 10*9 && generationCount < batasGenerasi);//Looping akan diulang sampai solusi sudah ketemu atau generasi sudah mencapai batas
+        if(generasi.populasi.fittest == (generasi.totalAngkaTabel*10*9)){//Jika solusi ketemu maka keluarkan output yang sesuai
+            System.out.println("Generasi solusi berada pada generasi populasi ke-" + generationCount);
+        }else{//Jika tidak maka solusi hanya sub-optimal
+            System.out.println("Pencobaan generasi berhenti pada generasi populasi ke-" + generationCount);
+        }
+        //Output hasil akhir
+        System.out.println("Fitness akhir: "+ generasi.populasi.fittest + "/"+generasi.totalAngkaTabel*10*9);
+        System.out.println("Genes terbaik: ");
+        int len = (int) Math.sqrt(panjangTabel);//Mengambil akar dari panjang untuk memetakan output pada array 2D
+        //Mengeluarkan output
         for (int i = 0; i < len; i++) {
             for(int j =0; j < len; j++){
                 System.out.print(generasi.populasi.individuTerbaik().arrGene[i*len + j] + " ");

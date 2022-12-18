@@ -15,7 +15,7 @@ class Individual {
     static int[] tabel;//Variable tabel untuk menyimpan tabel soal yang dimasukan
     static int totalAngkaTabel;//Variable totalAngkaTabel untuk menghitung banyaknya angka yang berada pada tabel soal
     static int panjangTabel;//Variabel panjangTabel untuk menyimpan panjang tabel
-    
+    static Random rand;//Variabel rand untuk menggunakan random yang sudah di inisialisasi di awal
     
     int[] arrGene;//Variabel array of int untuk merepresentasikan kromosom
     int fitness;//Variabel fitness untuk menyimpan fitness dari kromosom tersebut
@@ -28,8 +28,8 @@ class Individual {
     }
     
     //Yang kedua adalah untuk menginisialisasi kelas individual baru dari variabel-variabel pada parameter
-    public Individual(int panjangTabel, int[] tabel, int totalAngkaTabel) {
-        Random rand = new Random(); //Membuat variable rand untuk menggunakan library random dari java
+    public Individual(int panjangTabel, int[] tabel, int totalAngkaTabel, Random rand) {
+        this.rand = rand; 
         this.totalAngkaTabel = totalAngkaTabel; //Menginisialisasi totalAnkaTabel dari input
         this.panjangTabel = panjangTabel;//Menginisialisasi panjangTabel dari input
         this.arrGene = new int[panjangTabel];//Membuat array baru dengan ukuran panjangTabel
@@ -43,7 +43,7 @@ class Individual {
     //Metode untuk menghitung nilai fitness
     /*Ide untuk menghitung nilai fitness adalah pertama dengan menentukan fitness jika solusi yang berada pada kromosom sudah benar, yaitu banyaknya angka tabel
     yang ada pada kromosom di kali 9 karena 1 angka bisa mempengaruhi 9 kotak, lalu dikali 10 karena angka bisa terdiri dari 0-9. Lalu counter menelusuri tabel dan jika
-    tabel bukan merupakan -1 (kosong) maka cari dari kotak-kotak sekelilingnya, jika terdapat perbedaan dengan angka aslinya (misalahnya angka adalah 6 namun hanya ada 3 kotak hitam)
+    tabel bukan merupakan -1 (kosong) maka cari dari kotak-kotak sekelilingnya, jika terdapat perbedaan dengan angka aslinya (misalnya angka adalah 6 namun hanya ada 3 kotak hitam)
     maka fitness yang benar tersebut dikurang sebanyak selisih angka dikali dengan angka yang terdapat pada tabel+ 1 (agar menghindari perkalian dengan 0). Hal ini dilakukan 
     untuk bisa membedakan jika angka pada tabel yang salah adalah angka yang besar atau yang kecil*/
     public void nilaiFitness() {
