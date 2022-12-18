@@ -16,11 +16,14 @@ https://www.youtube.com/watch?v=9JzFcGdpT8E untuk roulette wheel selection
 
 https://linuxhint.com/sort-2d-array-in-java/ untuk sorting array 2d
 */
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 public class MainTubesPSC {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         Scanner sc = new Scanner(System.in);
         System.out.print("Path nama file input:");
         String namaFile = sc.next();
@@ -46,11 +49,14 @@ public class MainTubesPSC {
                 totalAngkaTabel ++; //update jumlahnya
             }
         }
+        fileReader.close();
+        BufferedWriter fileWriter = new BufferedWriter(new FileWriter(namaFile+ "res"));
         long generationCount = 1; //Membuat atribut untuk menghitung generasi
         Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel, rand, banyakElitism); //inisiasi generasi baru
         do{ //lakukan pencarian generasi baru untuk menemukan hasil selama fittest masih kurang dari
             generasi.populasi.hitungFitness(); //menghitung fittest dari generasi baru
-            System.out.println("Generasi ke-" + generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
+            fileWriter.write("Generasi ke-" + generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
+            fileWriter.append("\n");
             generationCount++; //update jumlah generasi
             if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){ //selama belum menemukan hasil yang optimal,
                 generasi.seleksiParent(pilihanSelection); //lakukan pencarian parent
@@ -65,20 +71,23 @@ public class MainTubesPSC {
             }
         }while (generasi.populasi.fittest < generasi.totalAngkaTabel * 10*9 && generationCount < batasGenerasi);//Looping akan diulang sampai solusi sudah ketemu atau generasi sudah mencapai batas
         if(generasi.populasi.fittest == (generasi.totalAngkaTabel*10*9)){//Jika solusi ketemu maka keluarkan output yang sesuai
-            System.out.println("Generasi solusi berada pada generasi populasi ke-" + generationCount);
+            fileWriter.write("Generasi solusi berada pada generasi populasi ke-" + generationCount);
         }else{//Jika tidak maka solusi hanya sub-optimal
-            System.out.println("Pencobaan generasi berhenti pada generasi populasi ke-" + generationCount);
+            fileWriter.write("Pencobaan generasi berhenti pada generasi populasi ke-" + generationCount);
         }
+        fileWriter.append("\n");
         //Output hasil akhir
-        System.out.println("Fitness akhir: "+ generasi.populasi.fittest + "/"+generasi.totalAngkaTabel*10*9);
-        System.out.println("Genes terbaik: ");
+        fileWriter.write("Fitness akhir: "+ generasi.populasi.fittest + "/"+generasi.totalAngkaTabel*10*9);
+        fileWriter.append("\n");
+        fileWriter.write("Genes terbaik: ");
+        fileWriter.append("\n");
         int len = (int) Math.sqrt(panjangTabel);//Mengambil akar dari panjang untuk memetakan output pada array 2D
         //Mengeluarkan output
         for (int i = 0; i < len; i++) {
             for(int j =0; j < len; j++){
-                System.out.print(generasi.populasi.individuTerbaik().arrGene[i*len + j] + " ");
+                fileWriter.write(generasi.populasi.individuTerbaik().arrGene[i*len + j] + " ");
             }
-            System.out.println("");
+            fileWriter.append("\n");
         }
     }
 }
