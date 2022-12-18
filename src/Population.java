@@ -144,10 +144,10 @@ class Population {
             arrTemp[i][1] = i;
         }
         Arrays.sort(arrTemp, (int[] pertama, int[] kedua) -> {
-            if(pertama[0] < kedua[0]){
-                return 1;
-            }else{
+            if(pertama[0] > kedua[0]){
                 return -1;
+            }else{
+                return 1;
             }
         });//Mengurut kan fitness dari array 2d menggunakan lambda dan method arrays.sort dari library dari besar ke kecil
         for(int i =0; i < elitism; i++){//For loop untuk memasukan individual yang unggul kepada array parent
