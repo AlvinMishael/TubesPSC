@@ -1,13 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+ Kelompok 20
+ - Wilson                   / 6182001039
+ - Alvin Mishael Halim      / 6182001047
+ - Muhammad Rafif Pratama   / 618200161
+ 
  */
 
-/**
- *
- * @author alvin
- */
 import java.util.*;
 //Kelas Generasi untuk menjadi kolam populasi (population pool)
 public class Generasi {
@@ -70,7 +69,7 @@ public class Generasi {
         Random rand = new Random(); //Membuat variable rand untuk menggunakan library random dari java
         int mutationPoint = rand.nextInt(panjangTabel); //Memilih titik mutasi secara random
         //menukar isi populasi pada titik mutasi tersebut
-        if(populasiBerikut.arrIndividual[idx].arrGene[mutationPoint] == 0){//jika isi 0 pada titik mutasi
+        if(populasiBerikut.arrIndividual[idx].arrGene[mutationPoint] == 0){//jika terisi 0 pada titik mutasi
             populasiBerikut.arrIndividual[idx].arrGene[mutationPoint] = 1;//maka ganti menjadi 1
         }else{//jika tidak
             populasiBerikut.arrIndividual[idx].arrGene[mutationPoint] = 0;//maka ganti menjadi 0

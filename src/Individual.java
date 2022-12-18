@@ -1,13 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+ Kelompok 20
+ - Wilson                   / 6182001039
+ - Alvin Mishael Halim      / 6182001047
+ - Muhammad Rafif Pratama   / 618200161
+ 
  */
 
-/**
- *
- * @author alvin
- */
 import java.util.Random;
 //Kelas untuk menjadi setiap kromosom
 class Individual {

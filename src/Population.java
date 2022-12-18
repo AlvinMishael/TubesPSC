@@ -1,15 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+
+ Kelompok 20
+ - Wilson                   / 6182001039
+ - Alvin Mishael Halim      / 6182001047
+ - Muhammad Rafif Pratama   / 618200161
+ 
  */
 
-/**
- *
- * @author alvin
- */
+
 import java.util.Random;
-//Kelas untuk menjadi populasi kromosom
+//Kelas untuk populasi kromosom
 class Population {
     //Variabel dibuat static karena hany perlu diinisialsasi sekali saja
     static int ukuranPopulasi;//Variabel ukuranPopulasi untuk menyimpan banyaknya kromosom untuk setiap populasi
@@ -19,7 +19,7 @@ class Population {
     Individual[] arrIndividual;//Variabel arrIndividual untuk merepresentasikan populasi 
     int fittest;//Variabel fittest untuk menyimpan fitness terbaik dari sebuah populasi
     int leastFittest;//Variabel leastFittest untuk menyimpan fitness terburuk dari sebuah populasi
-    //Metod untuk menginisialisasi populasi baru menggunakan hanya array of Individual
+    //Method untuk menginisialisasi populasi baru menggunakan hanya array of Individual
     public void inisialisasiPopulasiBaru(Individual[] arrIndividual){
         this.arrIndividual = new Individual[ukuranPopulasi];
         System.arraycopy(arrIndividual, 0, this.arrIndividual, 0, ukuranPopulasi);
@@ -27,10 +27,10 @@ class Population {
 
     //Inisialisasi Populasi dari variable ukuran
     public void inisialisasiPopulasi(int size, int geneLength, int[] tabel, int totalAngkaTabel) {
-        this.totalAngkaTabel = totalAngkaTabel;
-        this.tabel = tabel;
-        this.ukuranPopulasi = size;
-        this.arrIndividual = new Individual[this.ukuranPopulasi];
+        this.totalAngkaTabel = totalAngkaTabel;         //Variable totalAngkaTabel untuk menghitung banyaknya angka yang berada pada tabel soal
+        this.tabel = tabel;                         //Variable tabel untuk menyimpan tabel soal yang dimasukan
+        this.ukuranPopulasi = size;             //atribut untuk ukuran populasi
+        this.arrIndividual = new Individual[this.ukuranPopulasi];       //membuat individu baru
         for (int i = 0; i < arrIndividual.length; i++) {
             arrIndividual[i] = new Individual(geneLength, tabel, totalAngkaTabel);
         }
@@ -53,7 +53,7 @@ class Population {
     //Metode untuk mendapatkan individu terburuk
     public Individual individuTerburuk() {
         int minFittest = Integer.MAX_VALUE; //set minimum fittest dengan positif infinit
-        int idx_minFittest = 0; //index awal 0
+        int idx_minFittest = 0; //nilai fittest terendah dimulai dari 0
         for (int i = 0; i < arrIndividual.length; i++) { //loop sepanjang array untuk mencari fittest terendah
             if (minFittest >= arrIndividual[i].fitness) { //jika fittest individu ke-1 lebih kecil dari minFittest saat ini
                 minFittest = arrIndividual[i].fitness; //update minfittest
@@ -93,10 +93,10 @@ class Population {
 
     //menghitung fitness setiap individu
     public void hitungFitness() {
-        for (Individual individual : arrIndividual) {
+        for (Individual individual : arrIndividual) { //loop untuk mencari fitness tiap individu di array indiviual
             individual.nilaiFitness();
         }
-        this.individuTerbaik();
-        this.individuTerburuk();
+        this.individuTerbaik();       // mendapatkan fitness dari individu terbaik
+        this.individuTerburuk();    // mendapatkan fitness dari individu terburuk
     }
 }
