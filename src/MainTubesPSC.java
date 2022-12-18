@@ -16,6 +16,18 @@ https://www.youtube.com/watch?v=9JzFcGdpT8E untuk roulette wheel selection
 
 https://linuxhint.com/sort-2d-array-in-java/ untuk sorting array 2d
 */
+/*
+Format file input
+(angka long untuk seed random)
+(angka integer untuk banyak populasi)
+(angka integer untuk ukuran papan)
+(angka untuk batas generasi)
+(angka integer untuk probabilitas mutasi (1/angkaInput))
+(angka 1 atau 2 untuk metode selection (1 = Roulette wheel, 2 = Rank))
+(angka 1 atau 2 untuk metod crossover (1= 1-point Crossover, 2 = 2-Point Crossover))
+(angka integer untuk banyak individu masuk elitisim)
+(angka sebanyak ukuran papan * ukuran papan untuk input tabel (-1 berarti kotak kosong))
+*/
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -39,8 +51,8 @@ public class MainTubesPSC {
         int batasGenerasi = fileReader.nextInt();//Menginisialisasi variabel untuk batas generasi yang akan dicoba
         int probabilitasMutasi = fileReader.nextInt();//Menginisialisasi variabel untuk probabilitas mutasi (probabilitas akhir akan menjadi 1/probabilitasMutasi)
         int[] tabel = new int[panjangTabel];//Membuat variabel untuk menyimpan soal pada array of int
-        int pilihanSelection = fileReader.nextInt();//Membuat variabel untuk memilih selection apa yang akan dilakukan 
-        int pilihanCrossover = fileReader.nextInt();//Membuat variabel untuk memilih crossover apa yang akan dilakukan 
+        int pilihanSelection = fileReader.nextInt();//Membuat variabel untuk memilih selection apa yang akan dilakukan (Roulette wheel = 1, Rank =2)
+        int pilihanCrossover = fileReader.nextInt();//Membuat variabel untuk memilih crossover apa yang akan dilakukan (1-point crossover = 1, 2-point crossover =2)
         int banyakElitism = fileReader.nextInt();//Membaut variabel untuk menentukan berapa banyak individu yang akan dipilih dalam proses elitism
         int totalAngkaTabel =0; //variable ini digunakan untuk menghitung kotak yg tidak kosong atau terisi angka
         for(int i =0; i < panjangTabel; i++){ //input tabel mineswipper
