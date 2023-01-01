@@ -62,15 +62,17 @@ public class MainTubesPSC {
             }
         }
         fileReader.close();
+        double Time_start = System.nanoTime();
         BufferedWriter fileWriter = new BufferedWriter(new FileWriter((namaFile.substring(0, namaFile.length()-4)+ "Res.txt")));
         long generationCount = 1; //Membuat atribut untuk menghitung generasi
         Generasi generasi = new Generasi(ukuranPopulasi, totalAngkaTabel, panjangTabel, tabel, rand, banyakElitism); //inisiasi generasi baru
+        generasi.populasi.hitungFitness(); //menghitung fittest dari generasi
         do{ //lakukan pencarian generasi baru untuk menemukan hasil selama fittest masih kurang dari
-            generasi.populasi.hitungFitness(); //menghitung fittest dari generasi baru
+            System.out.println("Tes");
             fileWriter.write("Generasi ke-" + generationCount + " Fitness terbesar: " + generasi.populasi.fittest +" Fitness terkecil: " +generasi.populasi.leastFittest + " Fitness benar: " + generasi.totalAngkaTabel*9*10);
             fileWriter.append("\n");
-            generationCount++; //update jumlah generasi
             if(generasi.populasi.fittest < generasi.totalAngkaTabel*10*9){ //selama belum menemukan hasil yang optimal,
+                generationCount++; //update jumlah generasi
                 generasi.seleksiParent(pilihanSelection); //lakukan pencarian parent
                 generasi.crossover(pilihanCrossover); //kemudian crossover
                 //dan kemungkinan terjadinya mutasi dalam membentuk generasi baru adalah 1/10000 untuk setiap anggota dalam populasi
@@ -80,6 +82,7 @@ public class MainTubesPSC {
                     }
                 }
                 generasi.generasiBerikut();//Melakukan inisialisasi generasi berikutnya menggunakan method generasi
+                generasi.populasi.hitungFitness(); //menghitung fittest dari generasi baru
             }
         }while (generasi.populasi.fittest < generasi.totalAngkaTabel * 10*9 && generationCount < batasGenerasi);//Looping akan diulang sampai solusi sudah ketemu atau generasi sudah mencapai batas
         if(generasi.populasi.fittest == (generasi.totalAngkaTabel*10*9)){//Jika solusi ketemu maka keluarkan output yang sesuai
@@ -87,6 +90,10 @@ public class MainTubesPSC {
         }else{//Jika tidak maka solusi hanya sub-optimal
             fileWriter.write("Pencobaan generasi berhenti pada generasi populasi ke-" + generationCount);
         }
+        fileWriter.append("\n");
+        double Time_finish = System.nanoTime();
+        double waktuTotal = (Time_finish - Time_start) / 1000000000;
+         fileWriter.write("Waktu eksekusi: " + waktuTotal + " detik");
         fileWriter.append("\n");
         //Output hasil akhir
         fileWriter.write("Fitness akhir: "+ generasi.populasi.fittest + "/"+generasi.totalAngkaTabel*10*9);
